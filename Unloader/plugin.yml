@@ -1,3 +1,4 @@
 name: Unloader
 main: de.nuss9940.unloader.Unloader
 version: 1.0
+depend: [Multiverse-Core]

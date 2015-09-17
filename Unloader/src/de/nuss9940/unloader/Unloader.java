@@ -26,8 +26,6 @@ public class Unloader extends JavaPlugin {
 	Logger log = Logger.getLogger("Minecraft");
 	
 	
-	//depend: [MultiverseCore]
-	
 	
 	public void onDisable(){
 		
@@ -55,13 +53,27 @@ public class Unloader extends JavaPlugin {
 		
 		if (hh >= unloadtime || hh < 9) {
 			
-			//unload
-			unload(getTime());
+			//schedule load
+			load(getTime());
 			
 		} else if (hh < unloadtime || hh >= 9) {
 			
-			//load
-			load(getTime());
+			//open now
+			Bukkit.broadcastMessage(ChatColor.RED + "Die Creative Welt wird " + ChatColor.GREEN + "JETZT" + ChatColor.RED + " geöffnet!");
+			
+			mv = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
+			
+			if (mv != null) {
+				
+				mv.getCore().getMVWorldManager().loadWorld(world);
+				
+			} else {
+				log.warning("[Unloader] Multiverse-Core not found!");
+			}
+			
+			
+			//schedule unload
+			unload(getTime());
 			
 		}
 		
@@ -135,12 +147,16 @@ public class Unloader extends JavaPlugin {
 		}
 		
 		
-		return whhinmm - mm - 5;//-5 for 5m message before
+		return (whhinmm - mm)*60;
 		
 	}
 	
 	
 	public void unload(long t) {
+		
+		if (t > 300) {
+			t -= 300;
+		}
 		
 		
 		Bukkit.getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
@@ -157,19 +173,25 @@ public class Unloader extends JavaPlugin {
 						
 						Bukkit.broadcastMessage(ChatColor.RED + "Die Creative Welt wird " + ChatColor.GREEN + "JETZT" + ChatColor.RED + " geschlossen!");
 						
-						mv = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("MultiverseCore");
-						mv.getCore().getMVWorldManager().unloadWorld(world, true);
-						
-						Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+						mv = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
+
+						if (mv != null) {
 							
-							@Override
-							public void run() { load(getTime()); }}, 1800L);//1.5 min
+							mv.getCore().getMVWorldManager().unloadWorld(world, true);
+						
+							Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+								
+								@Override
+								public void run() { load(getTime()); }}, 1800L);//1.5 min
+						} else {
+							log.warning("[Unloader] Multiverse-Core not found!");
+						}
 						
 					}
 				}, 6000L);//5 min
 				
 			}
-		}, t);
+		}, t*20);
 		
 	}
 	
@@ -183,27 +205,22 @@ public class Unloader extends JavaPlugin {
 			@Override
 			public void run() {
 				
-				Bukkit.broadcastMessage(ChatColor.RED + "Die Creative Welt wird in " + ChatColor.GREEN + "5 Minuten" + ChatColor.RED + " geöffnet!");
+				Bukkit.broadcastMessage(ChatColor.RED + "Die Creative Welt wird " + ChatColor.GREEN + "JETZT" + ChatColor.RED + " geöffnet!");
+				mv = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("Multiverse-Core");
 				
-				Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+				if (mv != null) {
 					
-					@Override
-					public void run() {
-						
-						Bukkit.broadcastMessage(ChatColor.RED + "Die Creative Welt wird " + ChatColor.GREEN + "JETZT" + ChatColor.RED + " geöffnet!");
-						mv = (MultiverseCore) Bukkit.getServer().getPluginManager().getPlugin("MultiverseCore");
-						mv.getCore().getMVWorldManager().loadWorld(world);
-						
-						Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-							
-							@Override
-							public void run() { unload(getTime()); }}, 1800L);//1.5 min
-						
-					}
-				}, 6000L);//5 min
+					mv.getCore().getMVWorldManager().loadWorld(world);
 				
+					Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
+						
+						@Override
+						public void run() { unload(getTime()); }}, 1800L);//1.5 min
+				} else {
+					log.warning("[Unloader] Multiverse-Core not found!");
+				}
 			}
-		}, t);
+		}, t*20);
 		
 	}
 	
