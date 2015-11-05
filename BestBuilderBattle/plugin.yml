@@ -1,0 +1,10 @@
+name: BestBuilderBattle
+main: de.nuss9940.bbb.Main
+version: 1.0
+commands:
+  bbb:
+    usage: /bbb <join|leave>
+    description: Hauptkommand
+  bestbuilderbattle:
+    usage: /bbb <join|leave|start|stop|reloadconfig>
+    description: Hauptkommand
