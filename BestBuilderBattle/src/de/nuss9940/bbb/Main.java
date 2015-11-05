@@ -14,6 +14,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.DisplaySlot;
 
 public class Main extends JavaPlugin {
 
@@ -34,6 +35,12 @@ public class Main extends JavaPlugin {
 		loadConfig();
 		Game.nextthemes = allthemes;
 		new Event();
+		Game.ranking = Bukkit.getScoreboardManager().getMainScoreboard().getObjective("bbbscore");
+		if (Game.ranking == null) {
+			Game.ranking = Bukkit.getScoreboardManager().getMainScoreboard().registerNewObjective("bbbscore", "dummy");
+			Game.ranking.setDisplayName("&b&lPunkte:");
+			Game.ranking.setDisplaySlot(DisplaySlot.SIDEBAR);
+		}
 	}
 
 	@Override
@@ -51,10 +58,9 @@ public class Main extends JavaPlugin {
 						return true;
 
 					} else if (args[0].equalsIgnoreCase("leave")) {
-
-						Game.players.remove(p.getName());
+						Game.leave(p);
 						return true;
-
+						
 					} else if (args[0].equalsIgnoreCase("start")) {
 
 						if (p.hasPermission("worldedit.*")) {
@@ -71,7 +77,8 @@ public class Main extends JavaPlugin {
 					} else if (args[0].equalsIgnoreCase("stop")) {
 
 						if (p.hasPermission("worldedit.*")) {
-							// TODO stop game
+							Bukkit.getScheduler().cancelTasks(Main.plugin);
+							Game.stop();
 							return true;
 						} else {
 							p.sendMessage(ChatColor.RED + "Nur für Admins!");
@@ -115,8 +122,6 @@ public class Main extends JavaPlugin {
 			examples.add(string);
 		}
 		getConfig().addDefault("Game.Things_to_Build", examples);
-		
-		// conf.addDefault("Locations.");
 		
 		getConfig().options().copyDefaults(true);
 		saveConfig();
