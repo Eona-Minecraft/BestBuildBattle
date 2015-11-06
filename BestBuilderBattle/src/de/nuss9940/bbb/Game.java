@@ -205,7 +205,7 @@ public class Game {
 								inv.addItem(meh);
 								inv.addItem(good);
 								inv.addItem(verygood);
-								p.teleport(thisa.getSpawn());
+								p.teleport(thisa.getSpawn(), TeleportCause.SPECTATE);
 							}
 							timeInSec--;
 						} else {
@@ -247,7 +247,7 @@ public class Game {
 			public void run() {
 				for (String pname : players) {
 					Player p = Bukkit.getPlayer(pname);
-					p.teleport(Main.lobby);
+					p.teleport(Main.lobby, TeleportCause.SPECTATE);
 					p.setScoreboard(Bukkit.getScoreboardManager().getNewScoreboard());
 				}
 				spectate = false;

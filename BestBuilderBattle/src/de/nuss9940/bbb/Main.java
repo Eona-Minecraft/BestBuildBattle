@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent.TeleportCause;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.DisplaySlot;
@@ -54,7 +55,7 @@ public class Main extends JavaPlugin {
 					if (args[0].equalsIgnoreCase("join")) {
 
 						Game.players.add(p.getName());
-						p.teleport(lobby);
+						p.teleport(lobby, TeleportCause.SPECTATE);
 						return true;
 
 					} else if (args[0].equalsIgnoreCase("leave")) {

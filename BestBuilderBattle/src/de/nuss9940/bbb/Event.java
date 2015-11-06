@@ -21,15 +21,16 @@ public class Event implements Listener {
 	@EventHandler
 	public void onTp(PlayerTeleportEvent e) {
 		if (Game.running) {
-			if (e.getCause().equals(TeleportCause.SPECTATE)) {
-				//TODO
-			} else {
-				if (e.getFrom().getWorld().getName().equals(Main.wname)) {
+			if (!e.getCause().equals(TeleportCause.SPECTATE)) {
+				if (e.getCause().equals(TeleportCause.ENDER_PEARL) && e.getFrom().getWorld().getName().equals(Main.wname)) {
 					e.setCancelled(true);
+				} else if (e.getFrom().getWorld().getName().equals(Main.wname)) {
+					if (Game.arenas.get(e.getPlayer().getName()) != null) {
+						e.setCancelled(true);
+					}
 				}
 			}
 		}
-		
 	}
 	
 	@EventHandler
