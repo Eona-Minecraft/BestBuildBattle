@@ -8,6 +8,7 @@ import java.util.Random;
 import me.clip.actionannouncer.ActionAnnouncer;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -154,17 +155,17 @@ public class Game {
 				lime.setColor(DyeColor.LIME);
 				green.setColor(DyeColor.GREEN);
 				
-				verybad = red.toItemStack();
-				bad = orange.toItemStack();
-				meh = yellow.toItemStack();
-				good = lime.toItemStack();
-				verygood = green.toItemStack();
+				verybad = red.toItemStack(1);
+				bad = orange.toItemStack(2);
+				meh = yellow.toItemStack(3);
+				good = lime.toItemStack(4);
+				verygood = green.toItemStack(5);
 				
-				verybad = name(verybad, "&4GRAUENHAFT!!");
-				bad = name(bad, "&6*kotz*");
-				meh = name(meh, "&eok!");
-				good = name(good, "&aschön!");
-				verygood = name(verygood, "&2Wow!");
+				verybad = name(verybad, ChatColor.DARK_RED + "GRAUENHAFT!!");
+				bad = name(bad, ChatColor.GOLD + "*kotz*");
+				meh = name(meh, ChatColor.YELLOW + "ok!");
+				good = name(good, ChatColor.GREEN + "schön!");
+				verygood = name(verygood, ChatColor.DARK_GREEN + "Wow!");
 				
 				for (String pname : players) {
 					Player p = Bukkit.getPlayer(pname);
@@ -193,7 +194,7 @@ public class Game {
 								arenasleft--;
 							}
 						} else if (timeInSec == 15) {
-							showp = players.get(arenasleft - 1);
+							showp = players.get(arenasleft);
 							BuildArena thisa = arenas.get(showp);
 							for (String pname : players) {
 								Player p = Bukkit.getPlayer(pname);
@@ -215,7 +216,7 @@ public class Game {
 							timeInSec--;
 						}
 					}
-				}, 60, 20);
+				}, 20, 20);
 			}
 			
 		}, 60, 20);

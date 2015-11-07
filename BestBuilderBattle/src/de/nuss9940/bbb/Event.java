@@ -48,7 +48,8 @@ public class Event implements Listener {
 	
 	@EventHandler
 	public void onInteract(PlayerInteractEvent e) {
-		if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+		if ((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)
+				&& e.getItem() != null && e.getItem().hasItemMeta() && e.getItem().getItemMeta().hasDisplayName()) {
 			switch (e.getItem().getItemMeta().getDisplayName()) {
 			case "&4GRAUENHAFT!!":
 				Game.ranking.getScore(Game.showp).setScore(Game.ranking.getScore(Game.showp).getScore() + 1);

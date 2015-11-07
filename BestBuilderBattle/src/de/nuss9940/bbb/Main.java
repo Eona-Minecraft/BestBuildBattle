@@ -53,10 +53,13 @@ public class Main extends JavaPlugin {
 				Player p = (Player) sender;
 				if (args.length == 1) {
 					if (args[0].equalsIgnoreCase("join")) {
-
-						Game.players.add(p.getName());
-						p.teleport(lobby, TeleportCause.SPECTATE);
-						return true;
+						if (Game.players.contains(p.getName())) {
+							p.sendMessage(ChatColor.RED + "Du bist bereits im Spiel!");
+						} else {
+							Game.players.add(p.getName());
+							p.teleport(lobby, TeleportCause.SPECTATE);
+							return true;							
+						}
 
 					} else if (args[0].equalsIgnoreCase("leave")) {
 						Game.leave(p);
